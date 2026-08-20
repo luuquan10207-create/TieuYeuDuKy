@@ -485,29 +485,82 @@ function startGame() {
     enemies: any[] = [], selectedEnemy: any, npcSelected=false;
   const logs: string[] = [];
   const scene = {
-    preload(this: Phaser.Scene) {
+        preload(this: Phaser.Scene) {
       this.load.image("spirits", "/assets/mountain-spirits-atlas.png");
       this.load.image("hero-wukong", "/assets/heroes/wukong-yen-lang.png");
       this.load.image("hero-bajie", "/assets/heroes/bajie-yen-lang.png");
-      // Each actor has its own texture. Runtime atlas cropping used fractional
-      // cells (1774x887 / 4x2) and could cut off limbs or sample another actor.
-      for(let frame=0;frame<17;frame++){
-        this.load.image(`monster-${frame}`, `/assets/monsters/frames/monster-${frame}.png`);
-        this.load.image(`npc-${frame}`, `/assets/npcs/frames/npc-${frame}.png`);
+      this.load.image("hero-wujing", "/assets/heroes/wujing-v2.png");
+      this.load.image("hero-tang", "/assets/heroes/tang-v2.png");
+      // Load hero idle-v2 variants (geared/plain)
+      this.load.image("idle-wukong-plain", "/assets/heroes/idle-v2/wukong-plain.png");
+      this.load.image("idle-wukong-geared", "/assets/heroes/idle-v2/wukong-geared.png");
+      this.load.image("idle-bajie-plain", "/assets/heroes/idle-v2/bajie-plain.png");
+      this.load.image("idle-bajie-geared", "/assets/heroes/idle-v2/bajie-geared.png");
+      this.load.image("idle-wujing-plain", "/assets/heroes/idle-v2/wujing-plain.png");
+      this.load.image("idle-wujing-geared", "/assets/heroes/idle-v2/wujing-geared.png");
+      this.load.image("idle-tang-plain", "/assets/heroes/idle-v2/tang-plain.png");
+      this.load.image("idle-tang-geared", "/assets/heroes/idle-v2/tang-geared.png");
+      // Load individual monster frames (8 monsters)
+      for(let frame=0; frame<8; frame++){
+        this.load.image(`monster-${frame}`, `/assets/monsters/individual/monster-${frame}.png`);
       }
-      // Grass-biome elites are standalone actors. They never share a texture
-      // key/frame with regular monsters, so no runtime state can accidentally
-      // turn one of these elites into a normal mob (or vice versa).
-      for(let frame=0;frame<6;frame++){
-        this.load.image(`grass-elite-${frame}`, `/assets/monsters/grass-elites/elite-${frame}.png`);
+      // Load classic monsters
+      for(let frame=0; frame<10; frame++){
+        this.load.image(`classic-${frame}`, `/assets/monsters/classic/classic-${frame}.png`);
       }
-      // Night-map shadow animals are standalone actors like the grass elites:
-      // fixed texture/name per spawn, never swapped with regular monsters.
-      for(let frame=0;frame<6;frame++){
+      // Load extra monsters
+      for(let frame=0; frame<10; frame++){
+        this.load.image(`extra-${frame}`, `/assets/monsters/extra/extra-${frame}.png`);
+      }
+      // Load jester monsters atlas
+      this.load.image("jester-monsters", "/assets/monsters/jester-monsters-v3.png");
+      // Load Destroyer (Kẻ Hủy Diệt) - 5 forms
+      for(let frame=0; frame<5; frame++){
+        this.load.image(`destroyer-${frame}`, `/assets/monsters/shadow-animals/robot/robot-${frame}.png`);
+      }
+      // Load Ice Guard animations
+      this.load.image("iceguard-idle", "/assets/monsters/shadow-animals/ice-guard/idle.png");
+      this.load.image("iceguard-windup", "/assets/monsters/shadow-animals/ice-guard/windup.png");
+      this.load.image("iceguard-swing", "/assets/monsters/shadow-animals/ice-guard/swing.png");
+      this.load.image("iceguard-attack", "/assets/monsters/shadow-animals/ice-guard/attack-strip.png");
+      this.load.image("iceguard-lunge", "/assets/monsters/shadow-animals/ice-guard/lunge.png");
+      this.load.image("iceguard-hammer", "/assets/monsters/shadow-animals/ice-guard/hammer.png");
+      this.load.image("iceguard-finish", "/assets/monsters/shadow-animals/ice-guard/finish.png");
+      // Load shadow animals (6 base shadows)
+      for(let frame=0; frame<6; frame++){
         this.load.image(`shadow-${frame}`, `/assets/monsters/shadow-animals/shadow-${frame}.png`);
       }
-      this.load.image("boss-huangmei", "/assets/bosses/huangmei-two-forms.png");
-      this.load.image("mid-bosses", "/assets/bosses/mid-bosses.png");
+      // Load NPC frames - 20 individual NPCs
+      for(let frame=0; frame<20; frame++){
+        this.load.image(`npc-${frame}`, `/assets/npcs/individual/npc-${frame}.png`);
+      }
+      // Load village NPCs (19 NPCs for 2 villages)
+      for(let frame=1; frame<=19; frame++){
+        this.load.image(`village-npc-${frame.toString().padStart(2,'0')}`, `/assets/npcs/village/npc-${frame.toString().padStart(2,'0')}.png`);
+      }
+      // Load quest NPCs atlas
+      this.load.image("quest-npcs", "/assets/npcs/quest-npcs-normalized-v2.png");
+      // Load terrain assets
+      this.load.image("terrain-desert", "/assets/terrain/provided/desert.png");
+      this.load.image("terrain-grass-bright", "/assets/terrain/provided/grass-bright.png");
+      this.load.image("terrain-grass-soft", "/assets/terrain/provided/grass-soft.png");
+      this.load.image("terrain-ice-blue", "/assets/terrain/provided/ice-blue.png");
+      this.load.image("terrain-ice-crystal", "/assets/terrain/provided/ice-crystal.png");
+      this.load.image("terrain-ice-dark", "/assets/terrain/provided/ice-dark.png");
+      this.load.image("terrain-jade-stump", "/assets/terrain/provided/jade-stump.png");
+      this.load.image("terrain-rock-dark", "/assets/terrain/provided/rock-dark.png");
+      this.load.image("terrain-spirit-tree", "/assets/terrain/provided/spirit-tree.png");
+      // Load other assets
+      this.load.image("class-atlas", "/assets/class-atlas.png");
+      this.load.image("skill-atlas", "/assets/skill-atlas.png");
+      this.load.image("blacksmith-npc", "/assets/blacksmith-npc.png");
+      this.load.image("merchant-npc", "/assets/merchant-npc.png");
+      this.load.image("login-bg", "/assets/login-yen-lang.jpg");
+      // Load particle effects
+      this.load.image("particle-dust", "/assets/particles/dust.png");
+      this.load.image("particle-spark", "/assets/particles/spark.png");
+      this.load.image("particle-leaf", "/assets/particles/leaf.png");
+      this.load.image("particle-snow", "/assets/particles/snow.png");
     },
     create(this: Phaser.Scene & { 
       midElements?: Phaser.GameObjects.GameObject[];
