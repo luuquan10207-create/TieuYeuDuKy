@@ -1,0 +1,23 @@
+{
+  "name": "tieyeducy-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "games/*",
+    "config",
+    "docs"
+  ],
+  "scripts": {
+    "dev:game": "pnpm --filter @tieuyeducy/game dev",
+    "build:game": "pnpm --filter @tieuyeducy/game build",
+    "android:apk": "pnpm --filter @tieuyeducy/game android:apk",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r exec rm -rf node_modules dist build"
+  },
+  "devDependencies": {
+    "pnpm": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

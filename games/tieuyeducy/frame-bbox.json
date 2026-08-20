@@ -1,0 +1,146 @@
+[
+  {
+    "frame": 0,
+    "wPct": 0.83,
+    "hPct": 0.57,
+    "rawBoundsPx": {
+      "minX": 67,
+      "minY": 124,
+      "maxX": 433,
+      "maxY": 377,
+      "boxWidthPx": 367,
+      "boxHeightPx": 254
+    },
+    "cellSizePx": {
+      "cellW": 444,
+      "cellH": 444
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 1,
+    "wPct": 0.71,
+    "hPct": 0.68,
+    "rawBoundsPx": {
+      "minX": 74,
+      "minY": 82,
+      "maxX": 389,
+      "maxY": 382,
+      "boxWidthPx": 316,
+      "boxHeightPx": 301
+    },
+    "cellSizePx": {
+      "cellW": 443,
+      "cellH": 444
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 2,
+    "wPct": 0.87,
+    "hPct": 0.7,
+    "rawBoundsPx": {
+      "minX": 56,
+      "minY": 77,
+      "maxX": 443,
+      "maxY": 387,
+      "boxWidthPx": 388,
+      "boxHeightPx": 311
+    },
+    "cellSizePx": {
+      "cellW": 444,
+      "cellH": 444
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 3,
+    "wPct": 0.83,
+    "hPct": 0.62,
+    "rawBoundsPx": {
+      "minX": 0,
+      "minY": 113,
+      "maxX": 367,
+      "maxY": 387,
+      "boxWidthPx": 368,
+      "boxHeightPx": 275
+    },
+    "cellSizePx": {
+      "cellW": 443,
+      "cellH": 444
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 4,
+    "wPct": 0.91,
+    "hPct": 0.66,
+    "rawBoundsPx": {
+      "minX": 38,
+      "minY": 56,
+      "maxX": 439,
+      "maxY": 347,
+      "boxWidthPx": 402,
+      "boxHeightPx": 292
+    },
+    "cellSizePx": {
+      "cellW": 444,
+      "cellH": 443
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 5,
+    "wPct": 0.73,
+    "hPct": 0.7,
+    "rawBoundsPx": {
+      "minX": 72,
+      "minY": 46,
+      "maxX": 394,
+      "maxY": 354,
+      "boxWidthPx": 323,
+      "boxHeightPx": 309
+    },
+    "cellSizePx": {
+      "cellW": 443,
+      "cellH": 443
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 6,
+    "wPct": 0.94,
+    "hPct": 0.66,
+    "rawBoundsPx": {
+      "minX": 26,
+      "minY": 61,
+      "maxX": 443,
+      "maxY": 354,
+      "boxWidthPx": 418,
+      "boxHeightPx": 294
+    },
+    "cellSizePx": {
+      "cellW": 444,
+      "cellH": 443
+    },
+    "isEmpty": false
+  },
+  {
+    "frame": 7,
+    "wPct": 0.84,
+    "hPct": 0.78,
+    "rawBoundsPx": {
+      "minX": 0,
+      "minY": 11,
+      "maxX": 372,
+      "maxY": 354,
+      "boxWidthPx": 373,
+      "boxHeightPx": 344
+    },
+    "cellSizePx": {
+      "cellW": 443,
+      "cellH": 443
+    },
+    "isEmpty": false
+  }
+]

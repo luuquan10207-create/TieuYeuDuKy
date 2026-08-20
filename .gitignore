@@ -34,6 +34,11 @@ temp/
 node_modules/
 *.npm
 
+# Build outputs
+dist/
+build/
+android/app/build/
+
 # Large files / binary
 OpenClaw/
 hermes-agent/
@@ -53,3 +58,7 @@ work-v2.9/
 !MEMORY.md
 !openclaw-workspace-state.json
 !RESTORED-V5.7.3-NOTE.txt
+!package.json
+!pnpm-workspace.yaml
+!pnpm-lock.yaml
+!tsconfig.json
