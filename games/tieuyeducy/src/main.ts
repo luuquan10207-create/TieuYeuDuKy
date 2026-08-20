@@ -1634,6 +1634,8 @@ function startGame() {
           hero!.hp=Math.max(0,hero!.hp-dmg);hud();
           playHeroMotion("hurt");
           this.cameras.main.shake(90,mob.elite ? .008 : .003);
+          // Flash effect when player is hit
+          this.cameras.main.flash(200, 255, 255, 255, true);
           const hurt=this.add.text(player.x,player.y-95,`-${dmg}`,{fontSize:"20px",fontStyle:"bold",color:"#ff766e",stroke:"#160b10",strokeThickness:4}).setOrigin(.5).setDepth(20);
           this.tweens.add({targets:hurt,y:hurt.y-32,alpha:0,duration:600,onComplete:()=>hurt.destroy()});
           if(hero!.hp<=0){hero!.hp=hero!.maxHp;hero!.mp=hero!.maxMp;player.x=100;log("💀 Bị hạ! Đã hồi sinh tại cổng.");hud();persistLocalHero();}
