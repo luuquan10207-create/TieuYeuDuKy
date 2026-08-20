@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Farm Quái RPG</string>
-    <string name="title_activity_main">Farm Quái RPG</string>
-    <string name="package_name">com.jester.farmquai</string>
-    <string name="custom_url_scheme">com.jester.farmquai</string>
+    <string name="app_name">TieuYeuDuKy</string>
+    <string name="title_activity_main">TieuYeuDuKy</string>
+    <string name="package_name">com.tieuyeducy.game</string>
+    <string name="custom_url_scheme">com.tieuyeducy.game</string>
 </resources>
