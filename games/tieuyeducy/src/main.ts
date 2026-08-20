@@ -509,27 +509,72 @@ function startGame() {
       this.load.image("boss-huangmei", "/assets/bosses/huangmei-two-forms.png");
       this.load.image("mid-bosses", "/assets/bosses/mid-bosses.png");
     },
-    create(this: Phaser.Scene & { midElements?: Phaser.GameObjects.GameObject[] }) {
+    create(this: Phaser.Scene & { 
+      midElements?: Phaser.GameObjects.GameObject[];
+      weatherParticles?: any;
+      snowParticles?: any;
+      mistParticles?: any;
+      emberParticles?: any;
+      lightParticles?: any;
+      leafParticles?: any;
+      sandParticles?: any;
+      batParticles?: any;
+      sporeParticles?: any;
+      emberParticles2?: any;
+      divineParticles?: any;
+      lightningTimer?: Phaser.Time.TimerEvent;
+      currentTheme?: any;
+      currentZone?: number;
+    }) {
       let terrain: Phaser.GameObjects.Group;
       const drawMap = () => {
         terrain?.clear(true, true);
         terrain = this.add.group();
+        
+        // Enhanced biome themes with more atmospheric properties
         const themes = [
-          {name:"🌲 RỪNG SƠ KHAI", sky:0x173a2a, mid:0x285c3e, far:0x6fa44a, ground:0x1b4d2e, accent:0x8fd35a, type:"forest"},
-          {name:"🐗 THÔN TRƯ GIA", sky:0x36513c, mid:0x6b5b3d, far:0xb9955b, ground:0x4a3f2a, accent:0xd4a574, type:"village"},
-          {name:"🦇 HANG BÓNG TỐI", sky:0x0a0a1a, mid:0x1a1830, far:0x3a3555, ground:0x151225, accent:0x6b5b8a, type:"cave"},
-          {name:"🍄 ĐẦM NẤM ĐỘC", sky:0x2d3d28, mid:0x4a5d3a, far:0x8fb85a, ground:0x2a4525, accent:0xb8e57a, type:"swamp"},
-          {name:"🏜️ SA MẠC XÍCH PHONG", sky:0x7a4d23, mid:0xc56b42, far:0xf0c56b, ground:0x8b5a2b, accent:0xffc97a, type:"desert"},
-          {name:"🎋 TRÚC LÂM MÊ VỤ", sky:0x1d4c42, mid:0x317361, far:0x74b58c, ground:0x255a3a, accent:0x9fd4a3, type:"bamboo"},
-          {name:"❄️ BĂNG NGUYÊN VĨNH DẠ", sky:0x4a6d86, mid:0x8fc7d8, far:0xe7fbff, ground:0x5a8d9e, accent:0xcceeff, type:"ice"},
-          {name:"⚡ LÔI SƠN CỔ ĐẠO", sky:0x242744, mid:0x4f5680, far:0x9f8bc7, ground:0x2d3055, accent:0xb8a0e0, type:"storm"},
-          {name:"🌙 HUYẾT NGUYỆT MA THÀNH", sky:0x381010, mid:0x721f1b, far:0xe13b32, ground:0x4a1a1a, accent:0xff6b6b, type:"blood"},
-          {name:"☁️ THIÊN MÔN YÊN LÃNG", sky:0x335878, mid:0x6fa7b8, far:0xffd978, ground:0x4a6a55, accent:0xfff0a0, type:"heaven"},
+          {name:"🌲 RỪNG SƠ KHAI", sky:0x173a2a, mid:0x285c3e, far:0x6fa44a, ground:0x1b4d2e, accent:0x8fd35a, type:"forest", 
+            weather:"mist", particles:"leaves", ambientSound:"forest", fogDensity:0.15},
+          {name:"🐗 THÔN TRƯ GIA", sky:0x36513c, mid:0x6b5b3d, far:0xb9955b, ground:0x4a3f2a, accent:0xd4a574, type:"village",
+            weather:"clear", particles:"dust", ambientSound:"village", fogDensity:0.05},
+          {name:"🦇 HANG BÓNG TỐI", sky:0x0a0a1a, mid:0x1a1830, far:0x3a3555, ground:0x151225, accent:0x6b5b8a, type:"cave",
+            weather:"dark", particles:"bats", ambientSound:"cave", fogDensity:0.3},
+          {name:"🍄 ĐẦM NẤM ĐỘC", sky:0x2d3d28, mid:0x4a5d3a, far:0x8fb85a, ground:0x2a4525, accent:0xb8e57a, type:"swamp",
+            weather:"fog", particles:"spores", ambientSound:"swamp", fogDensity:0.25},
+          {name:"🏜️ SA MẠC XÍCH PHONG", sky:0x7a4d23, mid:0xc56b42, far:0xf0c56b, ground:0x8b5a2b, accent:0xffc97a, type:"desert",
+            weather:"heat", particles:"sand", ambientSound:"wind", fogDensity:0.1},
+          {name:"🎋 TRÚC LÂM MÊ VỤ", sky:0x1d4c42, mid:0x317361, far:0x74b58c, ground:0x255a3a, accent:0x9fd4a3, type:"bamboo",
+            weather:"mist", particles:"leaves", ambientSound:"bamboo", fogDensity:0.2},
+          {name:"❄️ BĂNG NGUYÊN VĨNH DẠ", sky:0x4a6d86, mid:0x8fc7d8, far:0xe7fbff, ground:0x5a8d9e, accent:0xcceeff, type:"ice",
+            weather:"snow", particles:"snow", ambientSound:"ice", fogDensity:0.15},
+          {name:"⚡ LÔI SƠN CỔ ĐẠO", sky:0x242744, mid:0x4f5680, far:0x9f8bc7, ground:0x2d3055, accent:0xb8a0e0, type:"storm",
+            weather:"storm", particles:"lightning", ambientSound:"thunder", fogDensity:0.2},
+          {name:"🌙 HUYẾT NGUYỆT MA THÀNH", sky:0x381010, mid:0x721f1b, far:0xe13b32, ground:0x4a1a1a, accent:0xff6b6b, type:"blood",
+            weather:"crimson", particles:"embers", ambientSound:"dark", fogDensity:0.25},
+          {name:"☁️ THIÊN MÔN YÊN LÃNG", sky:0x335878, mid:0x6fa7b8, far:0xffd978, ground:0x4a6a55, accent:0xfff0a0, type:"heaven",
+            weather:"ethereal", particles:"light", ambientSound:"heaven", fogDensity:0.1},
         ];
+        
+        // Time of day cycle (affects lighting)
+        const timeOfDay = Math.floor(Date.now() / 120000) % 4; // 0=dawn, 1=day, 2=dusk, 3=night
+        const timeModifiers = [
+          {skyMul:0.7, ambient:0xffe5b4}, // dawn
+          {skyMul:1.0, ambient:0xffffff}, // day
+          {skyMul:0.6, ambient:0xffcc88}, // dusk
+          {skyMul:0.3, ambient:0x444466}, // night
+        ];
+        const timeMod = timeModifiers[timeOfDay];
         const zone=map%themes.length;
         const t = themes[zone];
         const night=[2,6,7,8].includes(zone);
-        this.cameras.main.setBackgroundColor(t.sky);
+        
+        // Apply time of day lighting
+        const skyColor = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(t.sky),
+          Phaser.Display.Color.ValueToColor(timeMod.ambient),
+          10, Math.floor(3 * timeMod.skyMul)
+        );
+        this.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(skyColor.r, skyColor.g, skyColor.b));
         
         // ===== PARALLAX BACKGROUND LAYERS =====
         // Far mountains (slowest parallax)
@@ -676,8 +721,189 @@ function startGame() {
         
         terrain.setDepth(-5);
         
+        // ===== WEATHER PARTICLE SYSTEM =====
+        this.weatherParticles = this.add.particles(0, 0, "particle-dust", {
+          x: { min: 0, max: WORLD_WIDTH },
+          y: { min: -100, max: 100 },
+          lifespan: { min: 3000, max: 8000 },
+          speedX: { min: -20, max: 20 },
+          speedY: { min: 10, max: 50 },
+          scale: { start: 0.3, end: 0 },
+          alpha: { start: 0.3, end: 0 },
+          quantity: 2,
+          frequency: 800,
+          emitting: t.weather !== "clear" && t.weather !== "ethereal"
+        });
+        this.weatherParticles.setDepth(-4);
+        
+        // Weather-specific particles
+        if (t.weather === "snow") {
+          this.snowParticles = this.add.particles(0, 0, "particle-snow", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: -100,
+            lifespan: { min: 5000, max: 10000 },
+            speedX: { min: -30, max: 30 },
+            speedY: { min: 50, max: 120 },
+            scale: { start: 0.5, end: 0.1 },
+            alpha: { start: 0.6, end: 0 },
+            quantity: 3,
+            frequency: 300,
+            emitting: true
+          });
+          this.snowParticles.setDepth(-3);
+        } else if (t.weather === "mist" || t.weather === "fog") {
+          this.mistParticles = this.add.particles(0, 0, "particle-dust", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 350, max: 400 },
+            lifespan: { min: 8000, max: 15000 },
+            speedX: { min: -5, max: 5 },
+            speedY: { min: -2, max: 2 },
+            scale: { start: 1, end: 2 },
+            alpha: { start: 0.1, end: 0 },
+            quantity: 1,
+            frequency: 2000,
+            emitting: true,
+            blendMode: "ADD"
+          });
+          this.mistParticles.setDepth(-2);
+        } else if (t.weather === "storm") {
+          this.lightningTimer = this.time.addEvent({
+            delay: Phaser.Math.Between(3000, 8000),
+            loop: true,
+            callback: () => {
+              this.cameras.main.flash(100, 255, 255, 255, false);
+              this.time.delayedCall(50, () => this.cameras.main.flash(50, 200, 200, 255, false));
+            }
+          });
+        } else if (t.weather === "crimson") {
+          this.emberParticles = this.add.particles(0, 0, "particle-spark", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 300, max: 450 },
+            lifespan: { min: 2000, max: 4000 },
+            speedX: { min: -10, max: 10 },
+            speedY: { min: -80, max: -20 },
+            scale: { start: 0.4, end: 0 },
+            alpha: { start: 0.8, end: 0 },
+            quantity: 2,
+            frequency: 500,
+            emitting: true,
+            blendMode: "ADD"
+          });
+          this.emberParticles.setDepth(-2);
+        } else if (t.weather === "ethereal") {
+          this.lightParticles = this.add.particles(0, 0, "particle-spark", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 100, max: 400 },
+            lifespan: { min: 3000, max: 6000 },
+            speedX: { min: -15, max: 15 },
+            speedY: { min: -30, max: 30 },
+            scale: { start: 0.3, end: 0.8 },
+            alpha: { start: 0.4, end: 0 },
+            quantity: 2,
+            frequency: 600,
+            emitting: true,
+            blendMode: "ADD",
+            tint: [0xffd700, 0xfff0a0, 0xffe5b4]
+          });
+          this.lightParticles.setDepth(-2);
+        } else if (t.particles === "leaves") {
+          this.leafParticles = this.add.particles(0, 0, "particle-leaf", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: -50,
+            lifespan: { min: 8000, max: 15000 },
+            speedX: { min: -40, max: 40 },
+            speedY: { min: 30, max: 100 },
+            scale: { start: 0.4, end: 0.2 },
+            alpha: { start: 0.5, end: 0 },
+            rotate: { min: -180, max: 180 },
+            quantity: 1,
+            frequency: 1500,
+            emitting: true
+          });
+          this.leafParticles.setDepth(-2);
+        } else if (t.particles === "sand") {
+          this.sandParticles = this.add.particles(0, 0, "particle-dust", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 350, max: 380 },
+            lifespan: { min: 2000, max: 4000 },
+            speedX: { min: -60, max: 60 },
+            speedY: { min: -20, max: 20 },
+            scale: { start: 0.2, end: 0 },
+            alpha: { start: 0.4, end: 0 },
+            quantity: 3,
+            frequency: 400,
+            emitting: true
+          });
+          this.sandParticles.setDepth(-2);
+        } else if (t.particles === "bats") {
+          this.batParticles = this.add.particles(0, 0, "particle-dust", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 50, max: 200 },
+            lifespan: { min: 3000, max: 6000 },
+            speedX: { min: -80, max: 80 },
+            speedY: { min: -40, max: 40 },
+            scale: { start: 0.5, end: 0.1 },
+            alpha: { start: 0.6, end: 0 },
+            quantity: 1,
+            frequency: 2000,
+            emitting: true,
+            tint: 0x1a1a2e
+          });
+          this.batParticles.setDepth(-2);
+        } else if (t.particles === "spores") {
+          this.sporeParticles = this.add.particles(0, 0, "particle-spark", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 300, max: 420 },
+            lifespan: { min: 4000, max: 8000 },
+            speedX: { min: -10, max: 10 },
+            speedY: { min: -30, max: 10 },
+            scale: { start: 0.15, end: 0.3 },
+            alpha: { start: 0.3, end: 0 },
+            quantity: 2,
+            frequency: 800,
+            emitting: true,
+            blendMode: "ADD",
+            tint: [0xb8e57a, 0x8fd35a, 0x6fa44a]
+          });
+          this.sporeParticles.setDepth(-2);
+        } else if (t.particles === "embers") {
+          this.emberParticles2 = this.add.particles(0, 0, "particle-spark", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 350, max: 450 },
+            lifespan: { min: 1500, max: 3000 },
+            speedX: { min: -20, max: 20 },
+            speedY: { min: -100, max: -30 },
+            scale: { start: 0.3, end: 0 },
+            alpha: { start: 0.7, end: 0 },
+            quantity: 3,
+            frequency: 400,
+            emitting: true,
+            blendMode: "ADD",
+            tint: [0xff6b6b, 0xff8c42, 0xffd700]
+          });
+          this.emberParticles2.setDepth(-2);
+        } else if (t.particles === "light") {
+          this.divineParticles = this.add.particles(0, 0, "particle-spark", {
+            x: { min: 0, max: WORLD_WIDTH },
+            y: { min: 50, max: 350 },
+            lifespan: { min: 4000, max: 8000 },
+            speedX: { min: -10, max: 10 },
+            speedY: { min: -20, max: 20 },
+            scale: { start: 0.4, end: 1.2 },
+            alpha: { start: 0.3, end: 0 },
+            quantity: 2,
+            frequency: 700,
+            emitting: true,
+            blendMode: "ADD",
+            tint: [0xffd700, 0xfff8e7, 0xffe5b4, 0xffebcd]
+          });
+          this.divineParticles.setDepth(-2);
+        }
+        
         // Store mid-elements for parallax
         (this as any).midElements = midElements;
+        this.currentTheme = t;
+        this.currentZone = zone;
       };
       drawMap();
       const mapLabel=document.querySelector(".map-select") as HTMLElement;
@@ -1130,6 +1356,16 @@ function startGame() {
         if(changingMap)return;
         const next=MAPS[map+direction];
         if(!next)return;
+        
+        // Clean up weather particles before changing map
+        [this.weatherParticles, this.snowParticles, this.mistParticles, 
+         this.emberParticles, this.lightParticles, this.leafParticles,
+         this.sandParticles, this.batParticles, this.sporeParticles,
+         this.emberParticles2, this.divineParticles].forEach(p => {
+          if(p) { p.destroy(); }
+        });
+        if(this.lightningTimer) { this.lightningTimer.destroy(); }
+        
         changingMap=true;map+=direction;player.x=direction===1?100:WORLD_WIDTH-100;drawMap();updateNpc();spawnPack();updateMapLabel();refreshMapGates();
         log(`${direction===1?'➡':'⬅'} Đã tới ${MAPS[map][0]}`);this.time.delayedCall(350,()=>changingMap=false);
       };
@@ -1154,6 +1390,19 @@ function startGame() {
             }
           });
         }
+        // Sync particle emitters to camera position
+        const cam = this.cameras.main;
+        const particleSystems = [this.weatherParticles, this.snowParticles, this.mistParticles, 
+          this.emberParticles, this.lightParticles, this.leafParticles,
+          this.sandParticles, this.batParticles, this.sporeParticles,
+          this.emberParticles2, this.divineParticles];
+        particleSystems.forEach((p: any) => {
+          if(p && p.emitters) {
+            p.emitters.list.forEach((e: any) => {
+              if(e) e.setPosition(cam.scrollX + cam.width/2, cam.scrollY + cam.height/2);
+            });
+          }
+        });
       });
       const attack = (mult = 1, skillNo = -1) => {
         if(npcSelected){
