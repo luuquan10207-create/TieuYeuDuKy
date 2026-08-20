@@ -509,66 +509,175 @@ function startGame() {
       this.load.image("boss-huangmei", "/assets/bosses/huangmei-two-forms.png");
       this.load.image("mid-bosses", "/assets/bosses/mid-bosses.png");
     },
-    create(this: Phaser.Scene) {
+    create(this: Phaser.Scene & { midElements?: Phaser.GameObjects.GameObject[] }) {
       let terrain: Phaser.GameObjects.Group;
       const drawMap = () => {
         terrain?.clear(true, true);
         terrain = this.add.group();
         const themes = [
-          [0x173a2a, 0x285c3e, 0x6fa44a, "🌲 RỪNG SƠ KHAI"],
-          [0x36513c, 0x6b5b3d, 0xb9955b, "🐗 THÔN TRƯ GIA"],
-          [0x171626, 0x302747, 0x67517c, "🦇 HANG BÓNG TỐI"],
-          [0x304329, 0x5f7140, 0xb6ca63, "🍄 ĐẦM NẤM ĐỘC"],
-          [0x7a4d23, 0xc56b42, 0xf0c56b, "🏜️ SA MẠC XÍCH PHONG"],
-          [0x1d4c42, 0x317361, 0x74b58c, "🎋 TRÚC LÂM MÊ VỤ"],
-          [0x4a6d86, 0x8fc7d8, 0xe7fbff, "❄️ BĂNG NGUYÊN VĨNH DẠ"],
-          [0x242744, 0x4f5680, 0x9f8bc7, "⚡ LÔI SƠN CỔ ĐẠO"],
-          [0x381010, 0x721f1b, 0xe13b32, "🌙 HUYẾT NGUYỆT MA THÀNH"],
-          [0x335878, 0x6fa7b8, 0xffd978, "☁️ THIÊN MÔN YÊN LÃNG"],
-        ] as const;
+          {name:"🌲 RỪNG SƠ KHAI", sky:0x173a2a, mid:0x285c3e, far:0x6fa44a, ground:0x1b4d2e, accent:0x8fd35a, type:"forest"},
+          {name:"🐗 THÔN TRƯ GIA", sky:0x36513c, mid:0x6b5b3d, far:0xb9955b, ground:0x4a3f2a, accent:0xd4a574, type:"village"},
+          {name:"🦇 HANG BÓNG TỐI", sky:0x0a0a1a, mid:0x1a1830, far:0x3a3555, ground:0x151225, accent:0x6b5b8a, type:"cave"},
+          {name:"🍄 ĐẦM NẤM ĐỘC", sky:0x2d3d28, mid:0x4a5d3a, far:0x8fb85a, ground:0x2a4525, accent:0xb8e57a, type:"swamp"},
+          {name:"🏜️ SA MẠC XÍCH PHONG", sky:0x7a4d23, mid:0xc56b42, far:0xf0c56b, ground:0x8b5a2b, accent:0xffc97a, type:"desert"},
+          {name:"🎋 TRÚC LÂM MÊ VỤ", sky:0x1d4c42, mid:0x317361, far:0x74b58c, ground:0x255a3a, accent:0x9fd4a3, type:"bamboo"},
+          {name:"❄️ BĂNG NGUYÊN VĨNH DẠ", sky:0x4a6d86, mid:0x8fc7d8, far:0xe7fbff, ground:0x5a8d9e, accent:0xcceeff, type:"ice"},
+          {name:"⚡ LÔI SƠN CỔ ĐẠO", sky:0x242744, mid:0x4f5680, far:0x9f8bc7, ground:0x2d3055, accent:0xb8a0e0, type:"storm"},
+          {name:"🌙 HUYẾT NGUYỆT MA THÀNH", sky:0x381010, mid:0x721f1b, far:0xe13b32, ground:0x4a1a1a, accent:0xff6b6b, type:"blood"},
+          {name:"☁️ THIÊN MÔN YÊN LÃNG", sky:0x335878, mid:0x6fa7b8, far:0xffd978, ground:0x4a6a55, accent:0xfff0a0, type:"heaven"},
+        ];
         const zone=map%themes.length;
         const t = themes[zone];
-        this.cameras.main.setBackgroundColor(t[0]);
-        // Multi-layer scenery gives every zone depth instead of looking like a
-        // flat colored combat room.
         const night=[2,6,7,8].includes(zone);
-        terrain.add(this.add.circle(760,82,night?42:58,night?0xd7e6ff:0xffe59a,night?.78:.88));
-        if(night) for(let i=0;i<24;i++) terrain.add(this.add.circle(28+(i*137)%850,28+(i*61)%170,i%3+1,0xffffff,.45+i%2*.3));
-        terrain.add(this.add.triangle(-80,368,170,105,430,368,t[1],.72));
-        terrain.add(this.add.triangle(220,368,505,130,800,368,t[2],.32));
-        terrain.add(this.add.triangle(565,368,785,175,980,368,t[1],.55));
-        terrain.add(this.add.ellipse(160,90,190,44,0xffffff,.16));
-        terrain.add(this.add.ellipse(540,72,230,50,0xffffff,.12));
-        // Distant mist bands and horizon glow.
-        terrain.add(this.add.ellipse(450,320,980,100,t[2],.12));
-        terrain.add(this.add.rectangle(450,350,900,38,t[0],.32));
-        // Layered side-scrolling ground, inspired by classic Vietnamese mobile RPGs.
-        terrain.add(this.add.rectangle(WORLD_WIDTH/2, 450, WORLD_WIDTH, 140, t[1]).setStrokeStyle(5, 0x172033));
-        for (let x = 0; x < WORLD_WIDTH; x += 48) {
-          terrain.add(this.add.rectangle(x + 24, 386, 46, 18, t[2]).setStrokeStyle(2, 0x172033));
-          terrain.add(this.add.rectangle(x + 24, 410, 46, 28, t[1]).setStrokeStyle(1, 0x172033, .45));
-          terrain.add(this.add.circle(x+10+(x%3)*7,397+(x%4)*13,3+(x%5),t[0],.5));
-        }
-        terrain.add(this.add.text(24,22,t[3],{fontSize:"20px",color:"#ffffff",fontStyle:"bold",stroke:"#111827",strokeThickness:5}));
-        for (let i=0;i<18;i++) {
-          const px=45+i*110;
-          if(zone===0||zone===1||zone===5){
-            terrain.add(this.add.rectangle(px,330,13,105,t[1]).setStrokeStyle(3,0x172033));
-            terrain.add(this.add.circle(px-18,268,28,t[2],.9).setStrokeStyle(3,0x172033));
-            terrain.add(this.add.circle(px+15,258,36,t[2],.84).setStrokeStyle(3,0x172033));
-          }else if(zone===4){
-            terrain.add(this.add.rectangle(px,340,11,65,0x4a8b48).setStrokeStyle(3,0x24452a));
-            terrain.add(this.add.rectangle(px-13,326,18,8,0x4a8b48));terrain.add(this.add.rectangle(px+12,310,18,8,0x4a8b48));
-          }else if(zone===6||zone===9){
-            terrain.add(this.add.triangle(px,365,px-35,300,px+35,365,0xdffaff,.75).setStrokeStyle(3,0x6ca8bd));
-          }else{
-            terrain.add(this.add.polygon(px,326,[0,-52,25,-22,18,34,-18,34,-25,-22],zone===8?0x351319:0x28243b,.9));
+        this.cameras.main.setBackgroundColor(t.sky);
+        
+        // ===== PARALLAX BACKGROUND LAYERS =====
+        // Far mountains (slowest parallax)
+        for(let layer=0; layer<3; layer++){
+          const alpha = 0.15 - layer * 0.04;
+          const yBase = 180 + layer * 40;
+          const color = Phaser.Display.Color.Interpolate.ColorWithColor(
+            Phaser.Display.Color.ValueToColor(t.far),
+            Phaser.Display.Color.ValueToColor(t.mid),
+            2, layer
+          );
+          const mountainColor = Phaser.Display.Color.GetColor(color.r, color.g, color.b);
+          for(let i=0;i<5;i++){
+            const mx = -100 + i * 500 + (layer * 80);
+            const my = yBase + (i%2)*60;
+            const mw = 400 + (i%3)*150;
+            const mh = 200 + (i%2)*80;
+            terrain.add(this.add.triangle(mx, my+mh, mx+mw/2, my, mx+mw, my+mh, mountainColor, alpha));
           }
         }
-        for(let i=0;i<24;i++){const px=18+i*79;terrain.add(this.add.ellipse(px,371,26+i%3*8,9,t[2],.7).setStrokeStyle(2,t[0],.5));}
-        terrain.add(this.add.rectangle(WORLD_WIDTH-115,370,170,18,t[2]).setStrokeStyle(3,0x172033));
+        
+        // Sky elements
+        if(night){
+          // Moon with glow
+          const moon = this.add.circle(760, 82, 42, 0xd7e6ff, 0.78);
+          terrain.add(moon);
+          // Moon glow layers
+          for(let g=0;g<3;g++) terrain.add(this.add.circle(760,82,50+g*15,0xd7e6ff,0.08-g*0.02));
+          // Stars with twinkle
+          for(let i=0;i<30;i++){
+            const sx = 28+(i*137)%850;
+            const sy = 28+(i*61)%170;
+            const star = this.add.circle(sx, sy, 1.5+i%2, 0xffffff, 0.6);
+            terrain.add(star);
+            this.tweens.add({targets:star,alpha:{from:0.3,to:1},duration:1500+i*200,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+          }
+          // Floating particles (spirit motes)
+          for(let i=0;i<15;i++){
+            const px = Phaser.Math.Between(0, WORLD_WIDTH);
+            const py = Phaser.Math.Between(50, 250);
+            const mote = this.add.circle(px, py, Phaser.Math.FloatBetween(0.8, 2), 0xa8d0ff, Phaser.Math.FloatBetween(0.15, 0.4));
+            terrain.add(mote);
+            this.tweens.add({targets:mote,y:py-30,x:px+Phaser.Math.Between(-20,20),alpha:0,duration:Phaser.Math.Between(4000,8000),repeat:-1,delay:Phaser.Math.Between(0,4000),ease:"Sine.out"});
+          }
+        }else{
+          // Sun with rays
+          const sun = this.add.circle(760, 82, 58, 0xffe59a, 0.88);
+          terrain.add(sun);
+          for(let g=0;g<4;g++) terrain.add(this.add.circle(760,82,68+g*12,0xffd96b,0.06-g*0.01));
+          // Sun rays
+          for(let r=0;r<12;r++){
+            const angle = (r/12)*Math.PI*2;
+            const ray = this.add.line(760,82,0,0,Math.cos(angle)*120,Math.sin(angle)*120,0xffe59a,0.15);
+            terrain.add(ray);
+            this.tweens.add({targets:ray,angle:angle+0.1,duration:20000,repeat:-1,ease:"Linear"});
+          }
+          // Clouds
+          for(let i=0;i<8;i++){
+            const cx = -100 + i * 280 + Phaser.Math.Between(-50,50);
+            const cy = 60 + (i%3)*40;
+            const cloud = this.add.ellipse(cx, cy, 180+i%2*80, 45, 0xffffff, 0.25);
+            terrain.add(cloud);
+            this.tweens.add({targets:cloud,x:cx+WORLD_WIDTH+200,duration:Phaser.Math.Between(60000,120000),repeat:-1,ease:"Linear",onComplete:()=>{cloud.x=-200;}});
+          }
+        }
+        
+        // Mid-ground scenery (trees, rocks, structures)
+        const midElements = [];
+        for(let i=0;i<20;i++){
+          const px = 45 + i * 110;
+          const baseY = 330;
+          if(t.type==="forest"||t.type==="bamboo"||t.type==="village"){
+            // Trees with trunks and canopy
+            const trunk = this.add.rectangle(px, baseY+40, 14, 110, t.ground).setStrokeStyle(3,0x172033);
+            terrain.add(trunk); midElements.push(trunk);
+            const canopy1 = this.add.circle(px-18, baseY-30, 28, t.mid, 0.9).setStrokeStyle(3,0x172033);
+            const canopy2 = this.add.circle(px+15, baseY-40, 36, t.mid, 0.84).setStrokeStyle(3,0x172033);
+            terrain.add(canopy1); terrain.add(canopy2);
+            midElements.push(canopy1, canopy2);
+            // Sway animation
+            this.tweens.add({targets:[canopy1,canopy2],rotation:{from:-0.03,to:0.03},duration:3000+i*200,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+          }else if(t.type==="desert"){
+            // Cacti
+            const cactus = this.add.rectangle(px, baseY+50, 12, 70, 0x4a8b48).setStrokeStyle(3,0x24452a);
+            const arm1 = this.add.rectangle(px-13, baseY+30, 18, 8, 0x4a8b48);
+            const arm2 = this.add.rectangle(px+12, baseY+14, 18, 8, 0x4a8b48);
+            terrain.add(cactus); terrain.add(arm1); terrain.add(arm2);
+            midElements.push(cactus, arm1, arm2);
+          }else if(t.type==="ice"||t.type==="heaven"){
+            // Snow peaks / cloud pillars
+            const peak = this.add.triangle(px, baseY+35, px-35, baseY-30, px+35, baseY+35, 0xdffaff, 0.75).setStrokeStyle(3,0x6ca8bd);
+            terrain.add(peak); midElements.push(peak);
+          }else{
+            // Dead trees / spooky silhouettes
+            const dead = this.add.polygon(px, baseY+10,[0,-52,25,-22,18,34,-18,34,-25,-22],t.type==="blood"?0x351319:0x28243b,0.9);
+            terrain.add(dead); midElements.push(dead);
+          }
+        }
+        
+        // Ground layers with detail
+        // Deep ground
+        terrain.add(this.add.rectangle(WORLD_WIDTH/2, 450, WORLD_WIDTH, 140, t.ground).setStrokeStyle(5, 0x172033));
+        // Surface tiles with grass/dirt detail
+        for (let x = 0; x < WORLD_WIDTH; x += 48) {
+          const tile = this.add.rectangle(x + 24, 386, 46, 18, t.mid).setStrokeStyle(2, 0x172033);
+          terrain.add(tile);
+          const tile2 = this.add.rectangle(x + 24, 410, 46, 28, t.ground).setStrokeStyle(1, 0x172033, .45);
+          terrain.add(tile2);
+          // Small grass tufts / rocks
+          const detail = this.add.circle(x+10+(x%3)*7,397+(x%4)*13,3+(x%5),t.accent,0.5);
+          terrain.add(detail);
+          // Subtle sway for grass
+          if(t.type==="forest"||t.type==="bamboo"||t.type==="village"){
+            this.tweens.add({targets:detail,rotation:{from:-0.05,to:0.05},duration:2500+x*30,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+          }
+        }
+        
+        // Foreground mist / atmosphere
+        const mist = this.add.ellipse(450,320,980,100,t.far,0.12);
+        terrain.add(mist);
+        this.tweens.add({targets:mist,alpha:{from:0.08,to:0.18},duration:4000,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+        
+        // Ground highlight line
+        terrain.add(this.add.rectangle(450,350,900,38,t.sky,0.32));
+        
+        // Decorative foreground plants/rocks
+        for(let i=0;i<28;i++){
+          const px = 18 + i * 79;
+          const plant = this.add.ellipse(px, 371, 26+i%3*8, 9, t.mid, 0.7).setStrokeStyle(2, t.sky, 0.5);
+          terrain.add(plant);
+          if(t.type==="forest"||t.type==="bamboo"){
+            this.tweens.add({targets:plant,scaleX:{from:1,to:1.05},duration:2000+i*100,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+          }
+        }
+        
+        // Zone gate
+        terrain.add(this.add.rectangle(WORLD_WIDTH-115,370,170,18,t.mid).setStrokeStyle(3,0x172033));
         terrain.add(this.add.text(WORLD_WIDTH-176,344,"CỔNG KHU VỰC",{fontSize:"14px",color:"#172033",fontStyle:"bold"}));
+        
+        // Zone name with animated entrance
+        const zoneText = this.add.text(24,22,t.name,{fontSize:"20px",color:"#ffffff",fontStyle:"bold",stroke:"#111827",strokeThickness:5}).setAlpha(0);
+        terrain.add(zoneText);
+        this.tweens.add({targets:zoneText,alpha:1,y:18,duration:800,ease:"Back.out",delay:200});
+        
         terrain.setDepth(-5);
+        
+        // Store mid-elements for parallax
+        (this as any).midElements = midElements;
       };
       drawMap();
       const mapLabel=document.querySelector(".map-select") as HTMLElement;
@@ -817,10 +926,104 @@ function startGame() {
           });
           if(elite)this.tweens.add({targets:aura,scale:1.22,alpha:.08,duration:700,yoyo:true,repeat:-1});
           if(flying)this.tweens.add({targets:root,y:y-7,duration:650+i*40,yoyo:true,repeat:-1,ease:"Sine.inOut"});
-          // One-frame art cannot provide true skeletal frames, but alternating
-          // footfall/weight/arm swing gives every monster a readable living
-          // cadence without ever changing its facing while idle.
-          this.tweens.add({targets:body,y:body.y-(flying?3:4),angle:flying?2:(i%2?1.8:-1.8),scaleY:bodyBaseScaleY*(flying?.97:.94),duration:flying?360:260+i*18,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+          // Enhanced idle animation with breathing, sway, and micro-movements
+          // Each monster type gets unique idle behavior
+          const idleOffset = i * 120;
+          const isElite = elite || bossTier === "high" || bossTier === "mid";
+          const isShadow = !!shadowKind;
+          const isGrassElite = !!grassElite;
+          
+          // Base breathing animation
+          this.tweens.add({
+            targets: body,
+            y: body.y - (flying ? 3 : 4),
+            angle: flying ? 2 : (i%2 ? 1.8 : -1.8),
+            scaleY: bodyBaseScaleY * (flying ? .97 : .94),
+            scaleX: bodyBaseScaleX * (flying ? 1.01 : 1.005),
+            duration: flying ? 360 : 260 + i * 18,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.inOut",
+            delay: idleOffset
+          });
+          
+          // Secondary subtle sway for grounded monsters
+          if (!flying) {
+            this.tweens.add({
+              targets: body,
+              x: body.x + (i%2 ? 1.5 : -1.5),
+              duration: 2000 + i * 100,
+              yoyo: true,
+              repeat: -1,
+              ease: "Sine.inOut",
+              delay: idleOffset + 500
+            });
+          }
+          
+          // Elite/boss glow pulse
+          if (isElite) {
+            this.tweens.add({
+              targets: aura,
+              scale: { from: 1, to: 1.15 },
+              alpha: { from: elite ? 0.3 : 0.25, to: 0.45 },
+              duration: 1500 + i * 200,
+              yoyo: true,
+              repeat: -1,
+              ease: "Sine.inOut",
+              delay: idleOffset
+            });
+          }
+          
+          // Shadow monsters: eerie float + occasional flicker
+          if (isShadow) {
+            this.tweens.add({
+              targets: body,
+              y: body.y - (flying ? 6 : 8),
+              duration: 1800 + i * 150,
+              yoyo: true,
+              repeat: -1,
+              ease: "Sine.inOut",
+              delay: idleOffset
+            });
+            // Random flicker
+            this.time.addEvent({
+              delay: Phaser.Math.Between(3000, 8000),
+              loop: true,
+              callback: () => {
+                if (mob.alive) {
+                  body.setAlpha(0.7);
+                  this.tweens.add({ targets: body, alpha: 1, duration: 150, ease: "Quad.out" });
+                }
+              }
+            });
+          }
+          
+          // Grass elites: gentle sway like plants
+          if (isGrassElite) {
+            this.tweens.add({
+              targets: body,
+              angle: { from: -2, to: 2 },
+              duration: 3000 + i * 200,
+              yoyo: true,
+              repeat: -1,
+              ease: "Sine.inOut",
+              delay: idleOffset
+            });
+          }
+          
+          // Flying monsters: figure-8 patrol pattern
+          if (flying) {
+            this.tweens.add({
+              targets: root,
+              x: x + Phaser.Math.Between(-30, 30),
+              y: y - 7 + Phaser.Math.Between(-10, 10),
+              duration: Phaser.Math.Between(3000, 5000),
+              yoyo: true,
+              repeat: -1,
+              ease: "Sine.inOut",
+              delay: idleOffset
+            });
+          }
           // Ice soldiers telegraph their idle "red actions" with a red bar that
           // sweeps left -> right while passive. Once aggroed the tint cycles
           // yellow -> green -> white until death (handled in attack()).
@@ -939,6 +1142,17 @@ function startGame() {
         if(moving&&hero!.hp>0){
           player.x=Phaser.Math.Clamp(player.x+moving*0.34*Math.min(delta,34),70,WORLD_WIDTH-70);
           refreshMapGates();
+        }
+        // Parallax for mid-elements (slower than camera)
+        const midElements = (this as any).midElements as Phaser.GameObjects.GameObject[];
+        if(midElements){
+          const camX = this.cameras.main.scrollX;
+          midElements.forEach((el, idx) => {
+            if(el && el.active && 'x' in el){
+              const factor = 0.15 + (idx % 3) * 0.05; // Different parallax factors
+              (el as any).x = ((el as any).x || 0) + (camX * factor * 0.01);
+            }
+          });
         }
       });
       const attack = (mult = 1, skillNo = -1) => {
