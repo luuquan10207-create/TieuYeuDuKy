@@ -13,6 +13,10 @@
 *.mp4
 *.mov
 
+# Game runtime assets are source-controlled (required to build/run the game)
+!games/tieuyeducy/public/
+!games/tieuyeducy/public/**
+
 # OS / IDE
 .DS_Store
 Thumbs.db
@@ -49,6 +53,7 @@ npc-folder/
 work-v2.9/
 
 # Keep only workspace config docs
+config/openclaw.json
 !AGENTS.md
 !SOUL.md
 !IDENTITY.md
