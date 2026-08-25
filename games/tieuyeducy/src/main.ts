@@ -320,7 +320,7 @@ type RegisterDraft = { username: string; email: string; password: string };
 function landing() {
   const email = localStorage.getItem("fq-last-email") || "tài khoản đã lưu";
   const canContinue = Boolean(token);
-  app.innerHTML = `<main class="login-scene landing-scene"><section class="welcome-card landing-menu"><div class="login-title"><div class="login-emblem">山</div><div><div class="brand">FARM QUÁI</div><p class="sub">Tiểu Yêu Núi Yên Lãng</p></div></div><div class="entry-menu"><button class="entry continue" ${canContinue ? "" : "disabled"}><i>▶</i><span><small>TIẾP TỤC VỚI TÀI KHOẢN</small><b>${canContinue ? email : "Chưa có tài khoản đăng nhập"}</b></span></button><button class="entry new-game"><i>＋</i><span><small>KHỞI ĐẦU HÀNH TRÌNH</small><b>Chơi mới</b></span></button><button class="entry account"><i>♙</i><span><small>TÀI KHOẢN</small><b>Đăng nhập / Đăng ký</b></span></button></div><p class="save-note">☁ Tiến trình được lưu theo tài khoản của bạn</p></section></main>`;
+  app.innerHTML = `<main class="login-scene landing-scene"><section class="welcome-card landing-menu"><div class="login-title"><div class="login-emblem">山</div><div><div class="brand">TIỂU YÊU DU KÝ</div><p class="sub">Tiểu Yêu Núi Yên Lãng</p></div></div><div class="entry-menu"><button class="entry continue" ${canContinue ? "" : "disabled"}><i>▶</i><span><small>TIẾP TỤC VỚI TÀI KHOẢN</small><b>${canContinue ? email : "Chưa có tài khoản đăng nhập"}</b></span></button><button class="entry new-game"><i>＋</i><span><small>KHỞI ĐẦU HÀNH TRÌNH</small><b>Chơi mới</b></span></button><button class="entry account"><i>♙</i><span><small>TÀI KHOẢN</small><b>Đăng nhập / Đăng ký</b></span></button></div><p class="save-note">☁ Tiến trình được lưu theo tài khoản của bạn</p></section></main>`;
   app.querySelector(".continue")?.addEventListener("click", continueGame);
   app.querySelector(".new-game")!.addEventListener("click", () => choose(undefined, true));
   app.querySelector(".account")!.addEventListener("click", () => auth());
@@ -413,7 +413,7 @@ function play() {
   hero.mp ??= hero.maxMp;
   hero.inventory ??=[]; hero.equipped ??={}; hero.questKills ??=[]; hero.npcQuestDone ??=[];
   while(hero.questKills.length<MAPS.length) hero.questKills.push(0);
-  app.innerHTML = `<main class="shell game-shell"><div class="topline"><div class="brand">FARM QUÁI</div><div class="top-actions"><button class="icon-btn skills-btn">✦ Kỹ năng</button><button class="icon-btn inventory-btn">🎒<span>Hành trang</span></button><button class="icon-btn chat-btn">💬 Chat</button><button class="icon-btn logout">↪</button></div></div><div class="hud"></div><div class="game-layout"><section class="battle-wrap"><div id="game"></div><div class="monster-status empty"><span class="monster-icon">?</span><span><b>CHƯA CHỌN QUÁI</b><small>Chạm vào quái để xem trạng thái</small><i><em></em></i></span></div><button class="map-gate map-back" hidden>◀ BACK</button><button class="map-gate map-next" hidden>NEXT ▶</button><div class="mobile-controls"><div class="move-pad"><button class="move-left">◀</button><button class="move-right">▶</button></div><div class="combat-skills"></div><div class="action-orbs"><button class="power-btn">✦<span>KHÍ</span></button><div class="attack-stack"><button class="target-btn">◎<span>ĐỔI MỤC TIÊU</span></button><button class="attack-btn">⚔<span>ĐÁNH</span></button></div></div></div><div class="map-select"></div></section><aside class="side card"><h3>${CLASSES.find((c) => c[0] === hero!.classId)?.[1]}</h3><h3>Nhiệm vụ ngày</h3><button class="skill daily" ${hero.dailyClaimed ? "disabled" : ""}>🎁 ${hero.dailyClaimed ? "Đã nhận hôm nay" : "Nhận 5 kim cương"}</button><h3>Pet auto-farm</h3><div class="pets"></div><button class="skill offline" ${!hero.petId || Number(hero.offlineSeconds) < 60 ? "disabled" : ""}>💤 Quà offline (${Math.floor(Number(hero.offlineSeconds || 0) / 60)} phút)</button><h3>Chiến lợi phẩm</h3><div class="feed"></div></aside></div><dialog class="skill-modal"><button class="close">✕</button><h2>✦ Sách kỹ năng</h2><p class="skill-tip">Mỗi class có 10 kỹ năng. Kỹ năng mới mở theo cấp độ.</p><div class="skill-book"></div></dialog><dialog class="inventory-modal"><button class="close">✕</button><h2>🎒 Hành trang</h2><p class="inventory-rule">Mọi đồ rơi khóa đúng class • Chỉ số 1–15% • Boss cao cấp > tầm trung > quái > NPC</p><div class="equipment"></div><h3>Vật phẩm</h3><div class="bag-grid loot-grid"></div></dialog><dialog class="chat-modal"><button class="close">✕</button><h2>💬 Chat thế giới</h2><div class="chat-log"><p><b>[Hệ thống]</b> Chào mừng đến Farm Quái!</p></div><form class="chat-form"><input maxlength="80" placeholder="Nhập tin nhắn..."><button>Gửi</button></form></dialog></main>`;
+  app.innerHTML = `<main class="shell game-shell"><div class="topline"><div class="brand">TIỂU YÊU DU KÝ</div><div class="top-actions"><button class="icon-btn skills-btn">✦ Kỹ năng</button><button class="icon-btn inventory-btn">🎒<span>Hành trang</span></button><button class="icon-btn chat-btn">💬 Chat</button><button class="icon-btn logout">↪</button></div></div><div class="hud"></div><div class="game-layout"><section class="battle-wrap"><div id="game"></div><div class="monster-status empty"><span class="monster-icon">?</span><span><b>CHƯA CHỌN QUÁI</b><small>Chạm vào quái để xem trạng thái</small><i><em></em></i></span></div><button class="map-gate map-back" hidden>◀ BACK</button><button class="map-gate map-next" hidden>NEXT ▶</button><div class="mobile-controls"><div class="move-pad"><button class="move-left">◀</button><button class="move-right">▶</button></div><div class="combat-skills"></div><div class="action-orbs"><button class="power-btn">✦<span>KHÍ</span></button><div class="attack-stack"><button class="target-btn">◎<span>ĐỔI MỤC TIÊU</span></button><button class="attack-btn">⚔<span>ĐÁNH</span></button></div></div></div><div class="map-select"></div></section><aside class="side card"><h3>${CLASSES.find((c) => c[0] === hero!.classId)?.[1]}</h3><h3>Nhiệm vụ ngày</h3><button class="skill daily" ${hero.dailyClaimed ? "disabled" : ""}>🎁 ${hero.dailyClaimed ? "Đã nhận hôm nay" : "Nhận 5 kim cương"}</button><h3>Pet auto-farm</h3><div class="pets"></div><button class="skill offline" ${!hero.petId || Number(hero.offlineSeconds) < 60 ? "disabled" : ""}>💤 Quà offline (${Math.floor(Number(hero.offlineSeconds || 0) / 60)} phút)</button><h3>Chiến lợi phẩm</h3><div class="feed"></div></aside></div><dialog class="skill-modal"><button class="close">✕</button><h2>✦ Sách kỹ năng</h2><p class="skill-tip">Mỗi class có 10 kỹ năng. Kỹ năng mới mở theo cấp độ.</p><div class="skill-book"></div></dialog><dialog class="inventory-modal"><button class="close">✕</button><h2>🎒 Hành trang</h2><div class="inventory-stats"></div><p class="inventory-rule">Mọi đồ rơi khóa đúng class • Chỉ số 1–15% • Boss cao cấp > tầm trung > quái > NPC</p><div class="equipment"></div><h3>Vật phẩm</h3><div class="bag-grid loot-grid"></div></dialog><dialog class="chat-modal"><button class="close">✕</button><h2>💬 Chat thế giới</h2><div class="chat-log"><p><b>[Hệ thống]</b> Chào mừng đến Tiểu Yêu Du Ký!</p></div><form class="chat-form"><input maxlength="80" placeholder="Nhập tin nhắn..."><button>Gửi</button></form></dialog></main>`;
   const oldPad = document.querySelector(".move-pad") as HTMLElement;
   oldPad.className = "moba-stick";
   oldPad.innerHTML = "<i></i>";
@@ -422,6 +422,8 @@ function play() {
   const skillModal = document.querySelector(".skill-modal") as HTMLDialogElement;
   const iconStyle=(icon:number)=>`style="--ix:${icon%4};--iy:${Math.floor(icon/4)}"`;
   const renderInventory=()=>{
+    const skillPoints=Math.max(0,hero!.level-1);
+    document.querySelector(".inventory-stats")!.innerHTML=`<span><b>❤ ${hero!.hp}/${hero!.maxHp}</b><small>HP</small></span><span><b>◆ ${hero!.mp}/${hero!.maxMp}</b><small>MP</small></span><span><b>⚔ ${hero!.atk}</b><small>Công</small></span><span><b>🛡 ${hero!.def}</b><small>Thủ</small></span><span><b>✦ ${Math.round(hero!.crit*100)}%</b><small>Chí mạng</small></span><span class="skill-points"><b>⬡ ${skillPoints}</b><small>Điểm kỹ năng</small></span>`;
     const slots:[[string,string],[string,string],[string,string],[string,string]]=[["weapon","Vũ khí"],["head","Mũ"],["armor","Giáp"],["accessory","Phụ kiện"]];
     document.querySelector(".equipment")!.innerHTML=slots.map(([slot,label])=>{const item=hero!.inventory!.find(x=>x.id===hero!.equipped![slot]);return `<div class="equip-slot">${item?`<i class="loot-icon" ${iconStyle(item.icon)}></i><b>${item.name}</b><button data-unequip="${slot}">Tháo</button>`:`<span>＋</span><small>${label}</small>`}</div>`}).join("");
     document.querySelector(".loot-grid")!.innerHTML=hero!.inventory!.length?hero!.inventory!.map(item=>{const locked=item.allowedClass&&item.allowedClass!==hero!.classId;const worn=hero!.equipped![item.slot]===item.id;const className=CLASSES.find(c=>c[0]===item.allowedClass)?.[1]||"class hiện tại";const rule=`${item.tier||"Trang bị"}${item.bonusPercent?` +${item.bonusPercent}%`:""} • Chỉ ${className}`;return `<div class="loot-card ${locked?'locked':''}"><i class="loot-icon" ${iconStyle(item.icon)}></i><b>${item.name}</b><small>${rule} • ${item.atk?`+${item.atk} ATK `:""}${item.def?`+${item.def} DEF`:""}</small><button data-equip="${item.id}" ${locked||worn?'disabled':''}>${worn?'Đang mặc':locked?'Sai class':'Mặc'}</button></div>`}).join(""):'<p class="empty-bag">Chưa có trang bị — đi săn quái thôi bro 👀</p>';
@@ -515,8 +517,8 @@ function startGame() {
       // Load jester monsters atlas
       this.load.image("jester-monsters", "/assets/monsters/jester-monsters-v3.png");
       // Load Destroyer (Kẻ Hủy Diệt) - 5 forms
-      for(let frame=0; frame<5; frame++){
-        this.load.image(`destroyer-${frame}`, `/assets/monsters/shadow-animals/robot/robot-${frame}.png`);
+      for(let frame=1; frame<=5; frame++){
+        this.load.image(`destroyer-${frame}`, `/assets/monsters/shadow-animals/robot-v2/destroyer-${frame}.png`);
       }
       // Load Ice Guard animations
       this.load.image("iceguard-idle", "/assets/monsters/shadow-animals/ice-guard/idle.png");
@@ -744,6 +746,12 @@ function startGame() {
             this.tweens.add({targets:detail,rotation:{from:-0.05,to:0.05},duration:2500+x*30,yoyo:true,repeat:-1,ease:"Sine.inOut"});
           }
         }
+
+        // Hand-painted biome strip softens the procedural tiles and gives each
+        // map a distinct material while keeping the common combat feet line.
+        const groundTexture = t.type==="desert" ? "terrain-desert" : t.type==="ice" ? "terrain-ice-blue" : t.type==="cave"||t.type==="blood"||t.type==="storm" ? "terrain-rock-dark" : t.type==="swamp" ? "terrain-grass-soft" : "terrain-grass-bright";
+        const paintedGround=this.add.image(WORLD_WIDTH/2,470,groundTexture).setOrigin(.5,1).setDisplaySize(WORLD_WIDTH,205).setAlpha(.48);
+        terrain.add(paintedGround);
         
         // Foreground mist / atmosphere
         const mist = this.add.ellipse(450,320,980,100,t.far,0.12);
@@ -1164,10 +1172,11 @@ function startGame() {
           x=Math.min(x,WORLD_WIDTH-actorWidth/2-34);
           const root = this.add.container(x,y).setDepth(y).setSize(actorWidth+28,actorHeight+24).setInteractive(new Phaser.Geom.Rectangle(-(actorWidth+28)/2,-actorHeight-14,actorWidth+28,actorHeight+28),Phaser.Geom.Rectangle.Contains);
           const aura = this.add.ellipse(0,2,bossTier==="high"?170:elite?Math.max(112,actorWidth*.72):actorWidth*.72,bossTier==="high"?36:elite?28:18,shadowElite?0xd93a4b:(bossTier==="high"?0xe44dff:elite?0xffc83d:0x000000),elite ? .3 : .2);
-          const bodyTexture=shadowKind?.id ?? grassElite?.id ?? (bossTier==="high"?"boss-huangmei":bossTier==="mid"?"mid-bosses":`monster-${kind.frame}`);
+          const bodyTexture=shadowKind?.effect==="destroyer" ? "destroyer-1" : shadowKind?.id ?? grassElite?.id ?? (bossTier==="high"?"boss-huangmei":bossTier==="mid"?"mid-bosses":`monster-${kind.frame}`);
           const body = this.add.image(0,0,bodyTexture).setOrigin(.5,1);
           if(bossTier==="high") body.setCrop(0,0,1625/2,968).setDisplaySize(bodyWidth,bodyHeight);
           else if(bossTier==="mid") body.setCrop(midBossFrame*(1774/2),0,1774/2,887).setDisplaySize(bodyWidth,bodyHeight);
+          else if(shadowKind?.effect==="destroyer") body.setDisplaySize(96,100);
           else if(shadowKind) body.setDisplaySize(bodyWidth,bodyHeight);
           else if(grassElite) body.setDisplaySize(bodyWidth,bodyHeight);
           else {
@@ -1498,11 +1507,15 @@ function startGame() {
           if(nextForm>enemy.form){
             enemy.form=nextForm;
             enemy.atkMult=1+(enemy.form-1)*.4;
-            const boost=1+enemy.form*.035;
-            enemy.body.setScale(enemy.bodyBaseScaleX*boost,enemy.bodyBaseScaleY*boost);
+            const destroyerSizes=[[96,100],[112,140],[130,160],[154,188],[190,208]];
+            const [formW,formH]=destroyerSizes[enemy.form-1];
+            enemy.body.setTexture(`destroyer-${enemy.form}`).setDisplaySize(formW,formH).clearTint();
             enemy.bodyBaseScaleX=enemy.body.scaleX;enemy.bodyBaseScaleY=enemy.body.scaleY;
-            enemy.body.setTint([0x9aa0b4,0xd9534f,0xff8c2b,0xc46bff,0xfff2d9][enemy.form-1]);
-            this.cameras.main.flash(300,120,20,30);
+            this.cameras.main.flash(300,145,20,70);
+            this.cameras.main.shake(260,.009+enemy.form*.0015);
+            const core=this.add.circle(enemy.root.x,enemy.root.y-formH*.5,18,0xff174d,.34).setStrokeStyle(4,0xff5b85).setDepth(18);
+            this.tweens.add({targets:core,scale:4.5,alpha:0,duration:480,ease:"Quad.out",onComplete:()=>core.destroy()});
+            for(let p=0;p<14;p++){const spark=this.add.circle(enemy.root.x,enemy.root.y-formH*.48,2+p%3,0xff315f).setDepth(19);const a=Math.PI*2*p/14;this.tweens.add({targets:spark,x:enemy.root.x+Math.cos(a)*(45+enemy.form*8),y:enemy.root.y-formH*.48+Math.sin(a)*(40+enemy.form*7),alpha:0,duration:420+p*18,onComplete:()=>spark.destroy()});}
             const tx=this.add.text(enemy.root.x,enemy.root.y-195,`⚙️ KẺ HỦY DIỆT BIẾN DẠNG ${enemy.form}/5 ⚙️`,{fontSize:"17px",fontStyle:"bold",color:"#ff6b5e",stroke:"#2c0738",strokeThickness:5}).setOrigin(.5).setDepth(30);
             this.tweens.add({targets:tx,y:tx.y-34,alpha:0,duration:1000,onComplete:()=>tx.destroy()});
             log(`⚠ Kẻ Hủy Diệt biến dạng lần ${enemy.form} — sát thương tăng vọt!`);
@@ -1633,9 +1646,15 @@ function startGame() {
         this.time.delayedCall(mob.ranged?430:160,()=>{
           hero!.hp=Math.max(0,hero!.hp-dmg);hud();
           playHeroMotion("hurt");
-          this.cameras.main.shake(90,mob.elite ? .008 : .003);
-          // Flash effect when player is hit
-          this.cameras.main.flash(200, 255, 255, 255, true);
+          this.cameras.main.shake(mob.elite?170:110,mob.elite ? .011 : .004);
+          this.cameras.main.flash(140, 150, 8, 20, true);
+          const hitRing=this.add.circle(player.x,player.y-54,20,0xff294f,.18).setStrokeStyle(5,0xff8a74).setDepth(19);
+          const hitSlash=this.add.rectangle(player.x,player.y-56,7,92,0xffe3d2,.9).setAngle(mob.root.x<player.x?-56:56).setDepth(20);
+          const damageVignette=this.add.rectangle(VIEW_WIDTH/2,260,VIEW_WIDTH,520,0x8c071d,.12).setScrollFactor(0).setDepth(40);
+          this.tweens.add({targets:hitRing,scale:3.2,alpha:0,duration:260,onComplete:()=>hitRing.destroy()});
+          this.tweens.add({targets:hitSlash,scaleY:1.35,alpha:0,duration:190,onComplete:()=>hitSlash.destroy()});
+          this.tweens.add({targets:damageVignette,alpha:0,duration:280,onComplete:()=>damageVignette.destroy()});
+          for(let p=0;p<8;p++){const chip=this.add.circle(player.x,player.y-55,2+p%2,0xffb08f).setDepth(21);const a=Math.PI*2*p/8;this.tweens.add({targets:chip,x:player.x+Math.cos(a)*42,y:player.y-55+Math.sin(a)*34,alpha:0,duration:260+p*16,onComplete:()=>chip.destroy()});}
           const hurt=this.add.text(player.x,player.y-95,`-${dmg}`,{fontSize:"20px",fontStyle:"bold",color:"#ff766e",stroke:"#160b10",strokeThickness:4}).setOrigin(.5).setDepth(20);
           this.tweens.add({targets:hurt,y:hurt.y-32,alpha:0,duration:600,onComplete:()=>hurt.destroy()});
           if(hero!.hp<=0){hero!.hp=hero!.maxHp;hero!.mp=hero!.maxMp;player.x=100;log("💀 Bị hạ! Đã hồi sinh tại cổng.");hud();persistLocalHero();}
@@ -1685,9 +1704,9 @@ function startGame() {
     height: 520,
     parent: "game",
     backgroundColor: "#17253a",
-    pixelArt: true,
-    antialias: false,
-    roundPixels: true,
+    pixelArt: false,
+    antialias: true,
+    roundPixels: false,
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
@@ -1702,8 +1721,12 @@ function startGame() {
       .join("");
   }
   function hud() {
+    // Detach before replacing HUD markup so the button and its click listener
+    // survive every HP/MP refresh during combat.
+    const inventoryButton=document.querySelector(".inventory-btn");
     document.querySelector(".hud")!.innerHTML =
       `<div class="hero-status"><span class="pill identity"><b>${hero!.name}</b><small>Lv.${hero!.level}</small></span><span class="resource hp"><em>${hero!.hp}/${hero!.maxHp}</em><div class="bar"><i style="width:${(hero!.hp / hero!.maxHp) * 100}%"></i></div></span><span class="resource mp"><em>${hero!.mp}/${hero!.maxMp}</em><div class="bar"><i style="width:${(Number(hero!.mp) / Number(hero!.maxMp)) * 100}%"></i></div></span></div><div class="quick-stats"><span class="pill">⚔ ${hero!.atk}</span><span class="pill">🛡 ${hero!.def}</span><span class="pill coin">🪙 ${hero!.gold}</span><span class="pill">💎 ${hero!.diamond}</span><span class="resource exp">EXP<div class="bar"><i style="width:${(hero!.exp / (hero!.level * 100)) * 100}%"></i></div></span></div>`;
+    if(inventoryButton) document.querySelector(".hero-status")!.appendChild(inventoryButton);
   }
   function skills(atk: (n: number, effect?: number) => boolean | void) {
     const list = SKILLS[hero!.classId];
