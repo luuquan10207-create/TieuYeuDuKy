@@ -1,6 +1,8 @@
-# Farm Quái RPG — MVP
+# Tiểu Yêu Du Ký
 
-Web MVP dùng Phaser 3 + TypeScript/Vite, Express và SQLite.
+Game nhập vai 2D lấy cảm hứng từ Tây Du Ký, được xây dựng bằng Phaser 3,
+TypeScript/Vite, Express và SQLite. Game hỗ trợ chạy trên web và đóng gói
+thành ứng dụng Android bằng Capacitor.
 
 ## Chạy local
 
